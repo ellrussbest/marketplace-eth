@@ -3,14 +3,17 @@ import { CourseHero,
   Curriculum, 
   Keypoints 
 } from "@components/course";
+import { BaseLayout } from "@components/layout";
 
 
 export default function Course() {
   
     return (
-      <div className="relative max-w-7xl mx-auto px-4">
+      <BaseLayout>
         {/*------ HERO STARTS ------*/}
-        <CourseHero />
+        <div className="py-4">
+          <CourseHero />
+        </div>
         {/*------ HERO ENDS ------*/}
   
         {/*------ KEYPOINT STARTS ------*/}
@@ -24,6 +27,6 @@ export default function Course() {
         {/* MODAL STARTS */}
         <Modal />
         {/* MODAL ENDS */}
-      </div>
+      </BaseLayout>
     )
   }

@@ -1,49 +1,35 @@
-import { Navbar, Footer, Hero, Breadcrumbs } from "@components/common"
+import { Hero, Breadcrumbs } from "@components/common"
 import { CourseList } from "@components/course"
+import { BaseLayout } from "@components/layout"
 import { OrderCard } from "@components/orders"
 import { EthRates, Walletbar } from "@components/web3"
 
 export default function Home() {
   return (
-    <div>
-      <div className="relative bg-white overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4">
+    <BaseLayout>
+      {/*------ HERO STARTS ------*/}
+      <Hero />
+      {/*------ HERO ENDS ------*/}
 
-          {/*------ NAVBAR STARTS -------*/}
-          <Navbar />
-          {/*------ NAVBAR ENDS -------*/}
-          <div className="fit">
+      {/*------ BREADCRUMBS STARTS ------*/}
+      <Breadcrumbs />
+      {/*------ BREADCRUMBS ENDS ------*/}
 
-            {/*------ HERO STARTS ------*/}
-            <Hero />
-            {/*------ HERO ENDS ------*/}
+      {/*------ ADDRESS STARTS ------*/}
+      <Walletbar />
+      {/*------ ADDRESS ENDS ------*/}
 
-            {/*------ BREADCRUMBS STARTS ------*/}
-            <Breadcrumbs />
-            {/*------ BREADCRUMBS ENDS ------*/}
+      {/*------ CURRENCY STARTS ------*/}
+      <EthRates />
+      {/*------ CURRENCY ENDS ------*/}
 
-            {/*------ ADDRESS STARTS ------*/}
-            <Walletbar />
-            {/*------ ADDRESS ENDS ------*/}
+      {/*------ ORDER INFO STARTS ------*/}
+      <OrderCard />
+      {/*------ ORDER INFO ENDS ------*/}
 
-            {/*------ CURRENCY STARTS ------*/}
-            <EthRates />
-            {/*------ CURRENCY ENDS ------*/}
-
-            {/*------ ORDER INFO STARTS ------*/}
-            <OrderCard />
-            {/*------ ORDER INFO ENDS ------*/}
-
-            {/*------ COURSE CARD STARTS ------*/}
-            <CourseList />
-            {/*------ COURSE CARD ENDS ------*/}
-
-          </div>
-        </div>
-        {/*----- FOOTER STARTS ------*/}
-        <Footer />
-        {/*----- FOOTER ENDS ------*/}
-      </div>
-    </div>
+      {/*------ COURSE CARD STARTS ------*/}
+      <CourseList />
+      {/*------ COURSE CARD ENDS ------*/}
+    </BaseLayout>
   )
 }
