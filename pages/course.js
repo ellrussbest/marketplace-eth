@@ -9,7 +9,7 @@ import { BaseLayout } from "@components/layout";
 export default function Course() {
   
     return (
-      <BaseLayout>
+      <>
         {/*------ HERO STARTS ------*/}
         <div className="py-4">
           <CourseHero />
@@ -27,6 +27,8 @@ export default function Course() {
         {/* MODAL STARTS */}
         <Modal />
         {/* MODAL ENDS */}
-      </BaseLayout>
+      </>
     )
   }
+
+  Course.Layout = BaseLayout;
