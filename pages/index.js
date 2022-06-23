@@ -9,11 +9,9 @@ export default function Home( { courses } ) {
       {/*------ HERO STARTS ------*/}
       <Hero />
       {/*------ HERO ENDS ------*/}
-
-      {JSON.stringify(courses)}
       
       {/*------ COURSE CARD STARTS ------*/}
-      <CourseList />
+      <CourseList courses = {courses} />
       {/*------ COURSE CARD ENDS ------*/}
     </>
   )
