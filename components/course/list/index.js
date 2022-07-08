@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Course from "@pages/courses/[slug]";
 
 export default function List( { courses } ) {
     return(
@@ -25,6 +26,7 @@ export default function List( { courses } ) {
                     className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                     {course.type}
                 </div>
+                { /*<Link href={`/courses/${course.slug}`}> */}
                 <Link href={`/courses/${course.slug}`}>
                     <a
                         className="block mt-1 text-lg leading-tight font-medium text-black hover:underline">
