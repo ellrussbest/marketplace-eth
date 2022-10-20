@@ -1,29 +1,24 @@
 import { Breadcrumbs, Hero } from "@components/common";
 import { CourseCard } from "@components/course";
 import { BaseLayout } from "@components/layout";
-import { OrderCard } from "@components/order";
-import { EthRates, Walletbar } from "@components/web3";
+import { getAllCourses } from "content/courses/fetcher";
 
-export default function Home() {
+export default function Home({ courses }) {
   return (
     <BaseLayout>
       <Hero />
-
-      <Breadcrumbs />
-
-      <Walletbar />
-
-      <EthRates />
-
-      <OrderCard />
-
-      <section className="grid grid-cols-2 gap-4 mb-5">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <CourseCard key={i} />
-        ))}
-      </section>
+      <CourseCard courses={courses} />
     </BaseLayout>
   );
+}
+
+export function getStaticProps() {
+  const { data } = getAllCourses();
+  return {
+    props: {
+      courses: data,
+    },
+  };
 }
 
 // Home.Layout = BaseLayout;
