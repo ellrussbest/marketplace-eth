@@ -6,12 +6,15 @@ import { getAllCourses } from "content/courses/fetcher";
 export default function Course({ course }) {
   return (
     <BaseLayout>
-      {course.title}
       <div className="py-4">
-        <CourseHero />
+        <CourseHero
+          title={course.title}
+          description={course.description}
+          image={course.coverImage}
+        />
       </div>
-      <KeyPoints />;
-      <Curriculum />
+      <KeyPoints points={course.wsl} />;
+      <Curriculum locked={true} />
       <Modal />
     </BaseLayout>
   );

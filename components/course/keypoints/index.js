@@ -1,13 +1,13 @@
-export default function KeyPoints() {
+export default function KeyPoints({ points }) {
   return (
     <section>
-      {Array.from({ length: 4 }).map((_, i) => {
-        return (
-          <div className="py-12 bg-white" key={i}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="mt-10">
-                <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                  <div className="relative">
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mt-10">
+            <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+              {points.map((point, i) => {
+                return (
+                  <div key={point} className="relative">
                     <dt>
                       <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                         <svg
@@ -27,21 +27,19 @@ export default function KeyPoints() {
                         </svg>
                       </div>
                       <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
-                        Some keypoint
+                        KeyPoint {i + 1}
                       </p>
                     </dt>
                     <dd className="mt-2 ml-16 text-base text-gray-500">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Maiores impedit perferendis suscipit eaque, iste dolor
-                      cupiditate blanditiis ratione.
+                      {point}
                     </dd>
                   </div>
-                </dl>
-              </div>
-            </div>
+                );
+              })}
+            </dl>
           </div>
-        );
-      })}
+        </div>
+      </div>
     </section>
   );
 }
