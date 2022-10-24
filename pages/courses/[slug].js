@@ -1,11 +1,11 @@
-import { Modal } from "@components/common";
-import { CourseHero, Curriculum, KeyPoints } from "@components/course";
-import { BaseLayout } from "@components/layout";
+import { Modal } from "@components/ui/common";
+import { CourseHero, Curriculum, KeyPoints } from "@components/ui/course";
+import { BaseLayout } from "@components/ui/layout";
 import { getAllCourses } from "content/courses/fetcher";
 
 export default function Course({ course }) {
   return (
-    <BaseLayout>
+    <>
       <div className="py-4">
         <CourseHero
           title={course.title}
@@ -16,7 +16,7 @@ export default function Course({ course }) {
       <KeyPoints points={course.wsl} />;
       <Curriculum locked={true} />
       <Modal />
-    </BaseLayout>
+    </>
   );
 }
 
@@ -44,4 +44,4 @@ export function getStaticProps({ params }) {
   };
 }
 
-// Course.Layout = BaseLayout;
+Course.Layout = BaseLayout;

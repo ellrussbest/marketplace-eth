@@ -1,14 +1,14 @@
-import { Breadcrumbs, Hero } from "@components/common";
-import { CourseCard } from "@components/course";
-import { BaseLayout } from "@components/layout";
+import { Hero } from "@components/ui/common";
+import { CourseCard } from "@components/ui/course";
+import { BaseLayout } from "@components/ui/layout";
 import { getAllCourses } from "content/courses/fetcher";
 
 export default function Home({ courses }) {
   return (
-    <BaseLayout>
+    <>
       <Hero />
       <CourseCard courses={courses} />
-    </BaseLayout>
+    </>
   );
 }
 
@@ -21,4 +21,4 @@ export function getStaticProps() {
   };
 }
 
-// Home.Layout = BaseLayout;
+Home.Layout = BaseLayout;
