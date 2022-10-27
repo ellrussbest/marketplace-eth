@@ -24,11 +24,13 @@ export function getStaticPaths() {
   const { data } = getAllCourses();
 
   return {
-    paths: data.map((course) => ({
-      params: {
-        slug: course.slug,
-      },
-    })),
+    paths: data.map((course) => {
+      return {
+        params: {
+          slug: course.slug,
+        },
+      };
+    }),
     fallback: false,
   };
 }
