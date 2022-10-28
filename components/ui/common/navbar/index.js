@@ -1,6 +1,5 @@
 import { useWeb3 } from "@components/providers";
-import Link from "next/link";
-import { Button } from "@components/ui/common";
+import { Button, ActiveLink } from "@components/ui/common";
 import { useAccount } from "@components/hooks/web3";
 import { useRouter } from "next/router";
 
@@ -16,31 +15,31 @@ export default function Navbar() {
         <nav className="relative" aria-label="Global">
           <div className="flex justify-between items-center">
             <div>
-              <Link href="/">
-                <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+              <ActiveLink href="/">
+                <a className="font-medium mr-8 hover:text-gray-900">
                   Home
                 </a>
-              </Link>
+              </ActiveLink>
 
-              <Link href="/marketplace">
-                <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+              <ActiveLink href="/marketplace">
+                <a className="font-medium mr-8 hover:text-gray-900">
                   Marketplace
                 </a>
-              </Link>
+              </ActiveLink>
 
-              <Link href="/">
-                <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+              <ActiveLink href="/blogs">
+                <a className="font-medium mr-8 hover:text-gray-900">
                   Blogs
                 </a>
-              </Link>
+              </ActiveLink>
             </div>
 
             <div>
-              <Link href="/">
-                <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+              <ActiveLink href="/wishlist">
+                <a className="font-medium mr-8 hover:text-gray-900">
                   Wishlist
                 </a>
-              </Link>
+              </ActiveLink>
 
               {isLoading ? (
                 <Button
