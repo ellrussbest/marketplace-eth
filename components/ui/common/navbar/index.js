@@ -16,9 +16,7 @@ export default function Navbar() {
           <div className="flex justify-between items-center">
             <div>
               <ActiveLink href="/">
-                <a className="font-medium mr-8 hover:text-gray-900">
-                  Home
-                </a>
+                <a className="font-medium mr-8 hover:text-gray-900">Home</a>
               </ActiveLink>
 
               <ActiveLink href="/marketplace">
@@ -28,17 +26,13 @@ export default function Navbar() {
               </ActiveLink>
 
               <ActiveLink href="/blogs">
-                <a className="font-medium mr-8 hover:text-gray-900">
-                  Blogs
-                </a>
+                <a className="font-medium mr-8 hover:text-gray-900">Blogs</a>
               </ActiveLink>
             </div>
 
             <div>
               <ActiveLink href="/wishlist">
-                <a className="font-medium mr-8 hover:text-gray-900">
-                  Wishlist
-                </a>
+                <a className="font-medium mr-8 hover:text-gray-900">Wishlist</a>
               </ActiveLink>
 
               {isLoading ? (
