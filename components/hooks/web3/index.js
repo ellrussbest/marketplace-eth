@@ -30,3 +30,7 @@ export const useWalletInfo = () => {
 export const useOwnedCourses = (...args) => {
   return enhanceHook(useHooks((hooks) => hooks.useOwnedCourses(...args)));
 };
+
+export const useOwnedCourse = (...args) => {
+  return enhanceHook(useHooks((hooks) => hooks.useOwnedCourse(...args)));
+};

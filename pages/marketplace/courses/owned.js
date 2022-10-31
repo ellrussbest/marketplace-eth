@@ -1,4 +1,4 @@
-import { useAccount, useOwnedCourses } from "@components/hooks/web3";
+import { useAccount, useOwnedCourse, useOwnedCourses } from "@components/hooks/web3";
 import { Button, Message } from "@components/ui/common";
 import { OwnedCourseCard } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
