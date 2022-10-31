@@ -26,3 +26,7 @@ export const useWalletInfo = () => {
     canPurchaseCourse,
   };
 };
+
+export const useOwnedCourses = (...args) => {
+  return enhanceHook(useHooks((hooks) => hooks.useOwnedCourses(...args)));
+};
