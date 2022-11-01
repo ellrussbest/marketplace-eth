@@ -10,29 +10,35 @@ export default function Navbar() {
   const { pathname } = useRouter();
 
   return (
-    <section>
-      <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
+    <>
+      <div
+        className={`relative pt-6 px-4 sm:px-6 lg:px-8 backdrop-blur-3xl bg-slate-400/30 rounded-md py-6`}
+      >
         <nav className="relative" aria-label="Global">
-          <div className="flex justify-between items-center">
+          <div className="flex xs:flex-row xs:justify-between items-center">
             <div>
               <ActiveLink href="/">
-                <a className="font-medium mr-8 hover:text-gray-900">Home</a>
+                <a className="font-medium mr-1 sm:mr-8 hover:text-gray-900">
+                  Home
+                </a>
               </ActiveLink>
 
               <ActiveLink href="/marketplace">
-                <a className="font-medium mr-8 hover:text-gray-900">
+                <a className="font-medium mr-1 sm:mr-8 hover:text-gray-900">
                   Marketplace
                 </a>
               </ActiveLink>
 
               <ActiveLink href="/blogs">
-                <a className="font-medium mr-8 hover:text-gray-900">Blogs</a>
+                <a className="font-medium mr-5 hover:text-gray-900">Blogs</a>
               </ActiveLink>
             </div>
 
-            <div>
+            <div className="text-center flex items-center">
               <ActiveLink href="/wishlist">
-                <a className="font-medium mr-8 hover:text-gray-900">Wishlist</a>
+                <a className="font-medium sm:mr-8 mr-1 hover:text-gray-900">
+                  Wishlist
+                </a>
               </ActiveLink>
 
               {isLoading ? (
@@ -63,12 +69,12 @@ export default function Navbar() {
         </nav>
       </div>
       {address && !pathname.includes("/marketplace") && (
-        <div className="flex pt-1 justify-end sm:px-6 lg:px-8">
-          <div className="text-white bg-indigo-600 rounded-md p-2">
+        <div className="flex justify-end sm:px-6 lg:px-8 py-1">
+          <div className="text-white bg-indigo-600 rounded-md p-2 text-sm xs:text-base">
             {address}
           </div>
         </div>
       )}
-    </section>
+    </>
   );
 }

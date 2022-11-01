@@ -6,8 +6,10 @@ import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { getAllCourses } from "@content/courses/fetcher";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function OwnedCourses({ courses }) {
+  const router = useRouter();
   const { requireInstall } = useWeb3();
   const { data: address, isEmpty: isAddressEmpty } = useAccount();
   const { data: ownedCourses, isEmpty: isOwnedCourseEmpty } = useOwnedCourses(
@@ -17,9 +19,7 @@ export default function OwnedCourses({ courses }) {
 
   return (
     <>
-      <div className="py-4">
-        <MarketHeader />
-      </div>
+      <MarketHeader />
 
       <section className="grid grid-cols-1">
         {isOwnedCourseEmpty && (
@@ -48,7 +48,13 @@ export default function OwnedCourses({ courses }) {
         {ownedCourses?.map((course) => {
           return (
             <OwnedCourseCard key={course.id} course={course}>
-              <Button>Watch the course</Button>
+              <Button
+                onClick={() => {
+                  router.push(`/courses/${course.slug}`);
+                }}
+              >
+                Watch the course
+              </Button>
             </OwnedCourseCard>
           );
         })}

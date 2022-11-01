@@ -56,7 +56,11 @@ export default function Course({ course }) {
           )}
         </div>
       )}
-      <Curriculum isLoading={isLoading} locked={isLocked} courseState={courseState} />
+      <Curriculum
+        isLoading={isLoading}
+        locked={isLocked}
+        courseState={courseState}
+      />
       <Modal />
     </>
   );
