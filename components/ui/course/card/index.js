@@ -9,8 +9,8 @@ export default function Card({ course, Footer, disabled }) {
           <Image
             className={`object-cover ${disabled && "filter grayscale"}`}
             layout="responsive"
-            width="200"
-            height="230"
+            width="150"
+            height="170"
             src={course.coverImage}
             alt={course.title}
           />
@@ -24,7 +24,9 @@ export default function Card({ course, Footer, disabled }) {
               {course.title}
             </a>
           </Link>
-          <p className="mt-2 text-gray-500">{course.description.substring(0, 70)}...</p>
+          <p className="mt-2 text-gray-500">
+            {course.description.substring(0, 70)}...
+          </p>
 
           {Footer && <Footer />}
         </div>
