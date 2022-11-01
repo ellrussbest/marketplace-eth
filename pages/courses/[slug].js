@@ -41,7 +41,7 @@ export default function Course({ course }) {
           )}
           {courseState === "activated" && (
             <Message type="success">
-              Sisi Education wishes you a happy learning
+              Mimi Education wishes you a happy learning
             </Message>
           )}
           {courseState === "deactivated" && (

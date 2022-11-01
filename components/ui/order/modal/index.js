@@ -163,7 +163,7 @@ export default function OrderModal({
                   />
                 </label>
                 <span>
-                  I accept Sisi&apos;s terms of service&apos; and I agree that
+                  I accept Mimi&apos;s terms of service&apos; and I agree that
                   my order can be rejected in the case data provided above are
                   not correct
                 </span>

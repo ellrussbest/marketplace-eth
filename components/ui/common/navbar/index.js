@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <>
       <div
-        className={`relative pt-6 px-4 sm:px-6 lg:px-8 backdrop-blur-3xl bg-slate-400/30 rounded-md py-6`}
+        className={`relative pt-6 px-4 sm:px-6 lg:px-8 backdrop-blur-3xl bg-indigo-500/30 rounded-md py-6`}
       >
         <nav className="relative" aria-label="Global">
           <div className="flex xs:flex-row xs:justify-between items-center">
