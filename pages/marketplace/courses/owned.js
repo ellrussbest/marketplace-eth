@@ -64,10 +64,10 @@ export default function OwnedCourses({ courses }) {
 }
 
 export function getStaticProps() {
-  const { data } = getAllCourses();
+  const { data: courses } = getAllCourses();
   return {
     props: {
-      courses: data,
+      courses,
     },
   };
 }

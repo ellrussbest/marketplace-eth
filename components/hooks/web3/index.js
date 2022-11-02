@@ -47,3 +47,7 @@ export const useOwnedCourses = (...args) => {
 export const useOwnedCourse = (...args) => {
   return enhanceHook(useHooks((hooks) => hooks.useOwnedCourse(...args)));
 };
+
+export const useManagedCourses = (...args) => {
+  return enhanceHook(useHooks((hooks) => hooks.useManagedCourses(...args)))
+}
