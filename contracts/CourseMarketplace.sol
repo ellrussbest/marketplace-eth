@@ -38,6 +38,12 @@ contract CourseMarketplace {
     /// You don't have the permission to perform this operation
     error NotOwnerError();
 
+    /// This course does not exist
+    error CourseDoesNotExistError();
+
+    /// Course has invalid state!
+    error InvalidStateError();
+
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
             revert NotOwnerError();
@@ -66,6 +72,20 @@ contract CourseMarketplace {
             owner: msg.sender,
             state: State.Purchased
         });
+    }
+
+    function activateCourse(bytes32 courseHash) external onlyOwner {
+        if (!isCourseExisting(courseHash)) {
+            revert CourseDoesNotExistError();
+        }
+
+        Course storage course = ownedCourses[courseHash];
+
+        if (course.state != State.Purchased) {
+            revert InvalidStateError();
+        }
+
+        course.state = State.Activated;
     }
 
     function transferOwnership(address newOwner) external onlyOwner {
@@ -99,6 +119,15 @@ contract CourseMarketplace {
     function setContractOwner(address newOwner) private {
         // owner = newOwner;
         owner = payable(newOwner);
+    }
+
+    function isCourseExisting(bytes32 courseHash) private view returns (bool) {
+        Course storage course = ownedCourses[courseHash];
+
+        if (course.owner != 0x0000000000000000000000000000000000000000) {
+            return true;
+        }
+        return false;
     }
 
     function isAddressOwner(bytes32 courseHash) private view returns (bool) {
