@@ -36,8 +36,8 @@ const VerificationInput = ({ verifyCourse, managedCourse }) => {
 
 export default function ManagedCourses() {
   const [proofOfOwnership, setProofOfOwnership] = useState({});
-  const { data: address, isAdmin } = useAccount();
-  const { web3 } = useWeb3();
+  const { data: address, isAdmin, hasFinishedFirstFetch } = useAccount();
+  const { web3, contract } = useWeb3();
   const { data: managedCourses } = useManagedCourses(address, isAdmin);
 
   const verifyCourse = (email, { courseHash, proof }) => {
@@ -59,7 +59,22 @@ export default function ManagedCourses() {
         }));
   };
 
-  if(!isAdmin) return <div><Message type="danger">Unauthorized access!!</Message></div>
+  const activateCourse = async (courseHash) => {
+    try {
+      await contract.methods.activateCourse(courseHash).send({
+        from: address,
+      });
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
+  if (hasFinishedFirstFetch && !isAdmin)
+    return (
+      <div>
+        <Message type="danger">Unauthorized access!!</Message>
+      </div>
+    );
 
   return (
     <>
@@ -84,6 +99,17 @@ export default function ManagedCourses() {
             {proofOfOwnership[managedCourse.courseHash] == false && (
               <div className="mt-2">
                 <Message type="danger">Wrong Proof</Message>
+              </div>
+            )}
+            {managedCourse.state === "purchased" && (
+              <div className="mt-2">
+                <Button
+                  onClick={() => activateCourse(managedCourse.courseHash)}
+                  variant="green"
+                >
+                  Activate
+                </Button>
+                <Button variant="red">Deactivate</Button>
               </div>
             )}
           </ManagedCourseCard>

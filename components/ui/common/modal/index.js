@@ -3,7 +3,9 @@ export default function Modal({ isOpen, children }) {
     <section>
       {/* Remove hidden to display it */}
       <div
-        className={`${!isOpen && "hidden"} fixed z-50 inset-0 overflow-y-auto`}
+        className={`${
+          !isOpen && "hidden"
+        } fixed z-50 inset-0 overflow-y-auto backdrop-blur-sm`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
