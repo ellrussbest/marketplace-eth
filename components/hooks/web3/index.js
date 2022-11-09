@@ -11,7 +11,8 @@ const _isEmpty = (data) => {
 
 const enhanceHook = (swrResponse) => {
   const { data, error } = swrResponse;
-  const hasFinishedFirstFetch = !!(swrResponse.data || swrResponse.error);
+  const hasFinishedFirstFetch = !!(data || error);
+
   const isEmpty = hasFinishedFirstFetch && _isEmpty(data);
   return {
     ...swrResponse,
@@ -31,12 +32,16 @@ export const useNetwork = () => {
 export const useWalletInfo = () => {
   const account = useAccount();
   const network = useNetwork();
-  const canPurchaseCourse = !!(account.data && network.isSupported);
+  const hasConnectedWallet = !!(account.data && network.isSupported);
+  const isConnecting =
+    !account.hasFinishedFirstFetch && !network.hasFinishedFirstFetch;
+
 
   return {
     account,
     network,
-    canPurchaseCourse,
+    hasConnectedWallet,
+    isConnecting,
   };
 };
 
@@ -49,5 +54,5 @@ export const useOwnedCourse = (...args) => {
 };
 
 export const useManagedCourses = (...args) => {
-  return enhanceHook(useHooks((hooks) => hooks.useManagedCourses(...args)))
-}
+  return enhanceHook(useHooks((hooks) => hooks.useManagedCourses(...args)));
+};

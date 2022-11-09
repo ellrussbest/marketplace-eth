@@ -1,10 +1,18 @@
+const SIZE = {
+  sm: "p-2 text-sm xs:px-4",
+  md: "p-3 text-base xs:px-8",
+  lg: "p-3 text-lg xs:px-8",
+};
+
 export default function Button({
   children,
   className,
+  size = "md",
   variant = "purple",
   hoverable = true,
   ...rest
 }) {
+  const sizeClass = SIZE[size];
   const variants = {
     purple: `text-white bg-indigo-600 ${hoverable && "hover:text-indigo-700"}`,
     green: `text-white bg-green-600 ${hoverable && "hover:text-green-700"}`,
@@ -17,7 +25,7 @@ export default function Button({
   return (
     <button
       {...rest}
-      className={`disabled:opacity-50 disabled:cursor-not-allowed p-2 sm:px-8 xs:py-3 rounded-md border text-base font-medium ${className} ${variants[variant]} `}
+      className={`disabled:opacity-50 disabled:cursor-not-allowed ${sizeClass} rounded-md border font-medium ${className} ${variants[variant]} `}
     >
       {children}
     </button>

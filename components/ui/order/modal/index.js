@@ -12,14 +12,23 @@ const _createFormState = (isDisabled = false, message = "") => ({
   isDisabled,
   message,
 });
-const createFormState = ({ price, email, confirmationEmail }, hasAgreedTOS) => {
+const createFormState = (
+  { price, email, confirmationEmail },
+  hasAgreedTOS,
+  isNewPurchase
+) => {
   if (!price || Number(price) <= 0) {
     return _createFormState(true, "Price is not valid.");
-  } else if (confirmationEmail.length === 0 || email.length === 0) {
-    return _createFormState(true);
-  } else if (email != confirmationEmail) {
-    return _createFormState(true, "Emails are not matching");
-  } else if (!hasAgreedTOS) {
+  }
+
+  if (isNewPurchase) {
+    if (confirmationEmail.length === 0 || email.length === 0) {
+      return _createFormState(true);
+    } else if (email != confirmationEmail) {
+      return _createFormState(true, "Emails are not matching");
+    }
+  }
+  if (!hasAgreedTOS) {
     return _createFormState(
       true,
       "You need to agree with the Terms of Service in order to submit the form"
@@ -32,6 +41,8 @@ export default function OrderModal({
   course,
   setSelectedCourse,
   purchaseCourse,
+  setIsNewPurchase,
+  isNewPurchase,
 }) {
   const {
     eth: { perItem: price },
@@ -52,7 +63,7 @@ export default function OrderModal({
     }
   }, [course]);
 
-  const formState = createFormState(order, hasAgreedTOS);
+  const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
 
   return (
     <Modal isOpen={isOpen}>
@@ -110,48 +121,53 @@ export default function OrderModal({
                   allowed)
                 </p>
               </div>
-              <div className="mt-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Email</label>
-                </div>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  onChange={({ target: { value } }) => {
-                    setOrder({
-                      ...order,
-                      email: value.trim(),
-                    });
-                  }}
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
-                <p className="text-xs text-gray-700 mt-1">
-                  It&apos;s important to fill a correct email, otherwise the
-                  order cannot be verified. We are not storing your email
-                  anywhere
-                </p>
-              </div>
-              <div className="my-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Repeat Email</label>
-                </div>
-                <input
-                  type="email"
-                  name="confirmationEmail"
-                  id="confirmationEmail"
-                  onChange={({ target: { value } }) => {
-                    setOrder({
-                      ...order,
-                      confirmationEmail: value.trim(),
-                    });
-                  }}
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
-              </div>
-              <div className="text-xs text-gray-700 flex">
+              {isNewPurchase && (
+                <>
+                  <div className="mt-2 relative rounded-md">
+                    <div className="mb-1">
+                      <label className="mb-2 font-bold">Email</label>
+                    </div>
+
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      onChange={({ target: { value } }) => {
+                        setOrder({
+                          ...order,
+                          email: value.trim(),
+                        });
+                      }}
+                      className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="x@y.com"
+                    />
+                    <p className="text-xs text-gray-700 mt-1">
+                      It&apos;s important to fill a correct email, otherwise the
+                      order cannot be verified. We are not storing your email
+                      anywhere
+                    </p>
+                  </div>
+                  <div className="my-2 relative rounded-md">
+                    <div className="mb-1">
+                      <label className="mb-2 font-bold">Repeat Email</label>
+                    </div>
+                    <input
+                      type="email"
+                      name="confirmationEmail"
+                      id="confirmationEmail"
+                      onChange={({ target: { value } }) => {
+                        setOrder({
+                          ...order,
+                          confirmationEmail: value.trim(),
+                        });
+                      }}
+                      className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="x@y.com"
+                    />
+                  </div>
+                </>
+              )}
+              <div className="text-xs text-gray-700 flex mt-5">
                 <label className="flex items-center mr-2">
                   <input
                     checked={hasAgreedTOS}
@@ -192,6 +208,7 @@ export default function OrderModal({
               setSelectedCourse(null);
               setHasAgreedTOS(false);
               setIsChecked(false);
+              setIsNewPurchase(true);
             }}
             variant="red"
           >
