@@ -1,26 +1,43 @@
 import { Button } from "@components/ui/common";
+import { useState } from "react";
 
-export default function CourseFilter() {
+const OPTIONS = ["all", "purchased", "activated", "deactivated"];
+
+export default function CourseFilter({
+  handleSearchSubmit,
+  handleFilterSelected,
+}) {
+  const [sarchText, setSearchText] = useState("");
   return (
     <div className="flex flex-col sm:flex-row items-center my-4">
       <div className="flex mr-2 relative rounded-md">
         <input
+          onChange={({ target: { value } }) => {
+            setSearchText(value);
+          }}
+          value={sarchText}
           type="text"
-          name="account"
-          id="account"
+          name="courseHash"
+          id="courseHash"
           className="w-52 xs:w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
           placeholder="0x2341ab..."
         />
-        <Button>Search</Button>
+        <Button onClick={() => handleSearchSubmit(sarchText)}>Search</Button>
       </div>
       <div className="relative text-gray-700">
         <select
           className="w-44 md:w-72 h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
           placeholder="Regular input"
+          onChange={({ target: { value } }) => {
+            handleFilterSelected(value);
+          }}
         >
-          <option>A regular sized select input</option>
-          <option>Another option</option>
-          <option>And one more</option>
+          {OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {" "}
+              {option}{" "}
+            </option>
+          ))}
         </select>
         <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
           <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
