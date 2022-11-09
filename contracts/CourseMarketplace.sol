@@ -17,6 +17,8 @@ contract CourseMarketplace {
         State state; // 1 byte
     }
 
+    bool public isStopped = false;
+
     // mapping of courseHash to Course data
     mapping(bytes32 => Course) private ownedCourses;
 
@@ -54,7 +56,49 @@ contract CourseMarketplace {
         _;
     }
 
-    function purchaseCourse(bytes16 courseId, bytes32 proof) external payable {
+    modifier onlyWhenNotStopped() {
+        require(!isStopped);
+        _;
+    }
+
+    modifier onlyWhenStopped() {
+        require((isStopped));
+        _;
+    }
+
+    // makes your contract to receive payments from
+    // normal address to smart contract address
+    receive() external payable {}
+
+    function withdraw(uint256 amount) external onlyOwner {
+        (bool success, ) = owner.call{value: amount}("");
+        require(success, "Transfer failed");
+    }
+
+    function emergencyWithdraw() external onlyWhenStopped onlyOwner {
+        (bool success, ) = owner.call{value: address(this).balance}("");
+        require(success, "Transfer failed");
+    }
+
+    function selfDestruct() external onlyWhenStopped onlyOwner {
+        // destorys the contract and transfers all the amount to the owner
+        // automatically
+        selfdestruct(owner);
+    }
+
+    function stopContract() external onlyOwner {
+        isStopped = true;
+    }
+
+    function resumeContract() external onlyOwner {
+        isStopped = false;
+    }
+
+    function purchaseCourse(bytes16 courseId, bytes32 proof)
+        external
+        payable
+        onlyWhenNotStopped
+    {
         // keccak256 & abi are globally available in solidity
         // abi.encodePacked(arg); is used when we want to has multiple values
         // all at once
@@ -77,7 +121,11 @@ contract CourseMarketplace {
         });
     }
 
-    function repurchaseCourse(bytes32 courseHash) external payable {
+    function repurchaseCourse(bytes32 courseHash)
+        external
+        payable
+        onlyWhenNotStopped
+    {
         if (!isCourseExisting(courseHash)) {
             revert CourseDoesNotExistError();
         }
@@ -96,7 +144,11 @@ contract CourseMarketplace {
         course.price = msg.value;
     }
 
-    function activateCourse(bytes32 courseHash) external onlyOwner {
+    function activateCourse(bytes32 courseHash)
+        external
+        onlyWhenNotStopped
+        onlyOwner
+    {
         if (!isCourseExisting(courseHash)) {
             revert CourseDoesNotExistError();
         }
@@ -110,7 +162,11 @@ contract CourseMarketplace {
         course.state = State.Activated;
     }
 
-    function deactivateCourse(bytes32 courseHash) external onlyOwner {
+    function deactivateCourse(bytes32 courseHash)
+        external
+        onlyWhenNotStopped
+        onlyOwner
+    {
         if (!isCourseExisting(courseHash)) {
             revert CourseDoesNotExistError();
         }
