@@ -3,6 +3,7 @@ import useSWR from "swr";
 
 const adminAddresses = {
   "0x7f8f693dee85b11822fcac457803316bffb513479f361030ab4be24332cfa70b": true,
+  "0x87d2535f1ef4746eb30fe55f939535b9e3cacfa761ad42d25878f6d213e17659": true,
 };
 
 export const handler = (web3, provider) => () => {
@@ -59,7 +60,6 @@ export const handler = (web3, provider) => () => {
       provider?.removeListener("accountsChanged", mutator);
     };
   }, [provider]);
-
   return {
     data,
     isAdmin: (data && adminAddresses[web3.utils.keccak256(data)]) ?? false,
