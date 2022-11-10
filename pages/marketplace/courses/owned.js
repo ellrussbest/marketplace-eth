@@ -1,5 +1,4 @@
 import {
-  useAccount,
   useOwnedCourses,
   useWalletInfo,
 } from "@components/hooks/web3";
