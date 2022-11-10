@@ -111,20 +111,20 @@ export default function Statistics({ courses }) {
 
           <span className="flex justify-between text-base p-2 font-bold">
             {" "}
-            Total Number of courses:{"    "}
-            <strong className="text-2xl">{totalNumberOfCourses}</strong>
+            Total Number of Activated courses:{"    "}
+            <strong className="text-2xl">{numberOfActivated}</strong>
           </span>
 
           <span className="flex justify-between text-base p-2 font-bold">
             {" "}
-            Total Number of courses:{"    "}
-            <strong className="text-2xl">{totalNumberOfCourses}</strong>
+            Total Number of Deactivated courses:{"    "}
+            <strong className="text-2xl">{numberOfDeactivated}</strong>
           </span>
 
           <span className="flex justify-between text-base p-2 font-bold">
             {" "}
-            Total Number of courses:{"    "}
-            <strong className="text-2xl">{totalNumberOfCourses}</strong>
+            Total Number of Pending courses:{"    "}
+            <strong className="text-2xl">{numberOfPending}</strong>
           </span>
         </div>
       </div>
