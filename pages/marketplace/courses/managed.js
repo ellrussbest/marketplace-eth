@@ -1,10 +1,11 @@
 import { useAccount, useManagedCourses } from "@components/hooks/web3";
 import { useWeb3 } from "@components/providers";
-import { Button, Message } from "@components/ui/common";
+import { Button, Loader, Message } from "@components/ui/common";
 import { CourseFilter, ManagedCourseCard } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { normalizeOwnedCourse } from "@utils/normalize";
+import { withToast } from "@utils/toast";
 import { useState } from "react";
 
 const VerificationInput = ({ verifyCourse, managedCourse }) => {
@@ -42,6 +43,7 @@ export default function ManagedCourses() {
   const { data: managedCourses } = useManagedCourses(address, isAdmin);
   const [searchedCourse, setSearchedCourse] = useState(null);
   const [filteredCourse, setFilteredCourse] = useState({ state: "all" });
+  const [busyCourseId, setBusyCourseId] = useState(null);
 
   const verifyCourse = (email, { courseHash, proof }) => {
     if (email) {
@@ -63,25 +65,32 @@ export default function ManagedCourses() {
     }
   };
 
-  const changeCourseState = async (courseHash, method) => {
+  const changeCourseState = async (courseHash, method, courseId) => {
+    setBusyCourseId(courseId);
     try {
-      await contract.methods[method](courseHash).send({
+      const result = await contract.methods[method](courseHash).send({
         from: address,
       });
+
+      return result;
     } catch (e) {
       console.error(e.message);
+      throw new Error(e.message);
+    } finally {
+      setBusyCourseId(null);
     }
   };
 
-  const activateCourse = async (courseHash) => {
-    changeCourseState(courseHash, "activateCourse");
+  const activateCourse = async (courseHash, courseId) => {
+    withToast(changeCourseState(courseHash, "activateCourse", courseId));
   };
 
-  const deactivateCourse = async (courseHash) => {
-    changeCourseState(courseHash, "deactivateCourse");
+  const deactivateCourse = async (courseHash, courseId) => {
+    withToast(changeCourseState(courseHash, "deactivateCourse", courseId));
   };
 
   const renderCard = (managedCourse, isSearched) => {
+    const isBusy = busyCourseId === managedCourse.id;
     return (
       <ManagedCourseCard
         isSearched={isSearched}
@@ -106,16 +115,38 @@ export default function ManagedCourses() {
         {managedCourse.state === "purchased" && (
           <div className="mt-2">
             <Button
-              onClick={() => activateCourse(managedCourse.courseHash)}
+              disabled={isBusy}
+              onClick={() =>
+                activateCourse(managedCourse.courseHash, managedCourse.id)
+              }
               variant="green"
             >
-              Activate
+              {isBusy ? (
+                <div className="flex">
+                  {" "}
+                  <Loader size="sm" />
+                  <div className="ml-2">In Progress</div>
+                </div>
+              ) : (
+                <div>Activate</div>
+              )}
             </Button>
             <Button
-              onClick={() => deactivateCourse(managedCourse.courseHash)}
+              disabled={isBusy}
+              onClick={() =>
+                deactivateCourse(managedCourse.courseHash, managedCourse.id)
+              }
               variant="red"
             >
-              Deactivate
+              {isBusy ? (
+                <div className="flex">
+                  {" "}
+                  <Loader size="sm" />
+                  <div className="ml-2">In Progress</div>
+                </div>
+              ) : (
+                <div>Deactivate</div>
+              )}
             </Button>
           </div>
         )}

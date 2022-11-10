@@ -192,12 +192,18 @@ contract CourseMarketplace {
         return totalOwnedCourses;
     }
 
-    function getCourseHashAtIndex(uint256 index)
-        external
-        view
-        returns (bytes32)
-    {
+    function getCourseHashAtIndex(uint256 index) public view returns (bytes32) {
         return ownedCoursesHashList[index];
+    }
+
+    function getAllOwnedCourses() external view returns (Course[] memory) {
+        Course[] memory courses = new Course[](totalOwnedCourses);
+        for (uint256 i = 0; i < totalOwnedCourses; i++) {
+            Course storage course = ownedCourses[getCourseHashAtIndex(i)];
+            courses[i] = course;
+        }
+
+        return courses;
     }
 
     function getCourseByHash(bytes32 courseHash)

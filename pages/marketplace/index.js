@@ -7,21 +7,26 @@ import { useState } from "react";
 import { OrderModal } from "@components/ui/order";
 import { MarketHeader } from "@components/ui/marketplace";
 import { useWeb3 } from "@components/providers";
+import { withToast } from "@utils/toast";
 
 export default function Marketplace({ courses }) {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isNewPurchase, setIsNewPurchase] = useState(true);
+  const [busyCourseId, setBusyCourseId] = useState(null);
   const {
     hasConnectedWallet,
     account: { data: address },
     isConnecting,
   } = useWalletInfo();
-  const { lookup, hasFinishedFirstFetch } = useOwnedCourses(courses, address);
+  const { lookup, hasFinishedFirstFetch, mutate } = useOwnedCourses(
+    courses,
+    address
+  );
 
   const { web3, contract, requireInstall } = useWeb3();
 
-  const purchaseCourse = async (order) => {
-    const hexCourseId = web3.utils.utf8ToHex(selectedCourse.id);
+  const purchaseCourse = async (order, course) => {
+    const hexCourseId = web3.utils.utf8ToHex(course.id);
 
     // emailHash + courseHash = proof
     const courseHash = web3.utils.soliditySha3(
@@ -31,6 +36,8 @@ export default function Marketplace({ courses }) {
 
     const value = web3.utils.toWei(String(order.price));
 
+    setBusyCourseId(course.id);
+
     if (isNewPurchase) {
       const emailHash = web3.utils.sha3(order.email);
 
@@ -39,38 +46,47 @@ export default function Marketplace({ courses }) {
         { type: "bytes32", value: emailHash }
       );
 
-      _purchaseCourse(hexCourseId, proof, value);
+      withToast(_purchaseCourse(hexCourseId, proof, value));
     } else {
-      _repurchaseCourse(courseHash);
+      withToast(_repurchaseCourse(courseHash));
     }
   };
 
   const _purchaseCourse = async (hexCourseId, proof, value) => {
     try {
-      await contract.methods.purchaseCourse(hexCourseId, proof).send({
-        from: address,
-        value,
-      });
-    } catch {
-      console.log("Purchase course: Operation has failed");
+      const result = await contract.methods
+        .purchaseCourse(hexCourseId, proof)
+        .send({
+          from: address,
+          value,
+        });
+      mutate();
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      setBusyCourseId(null);
     }
   };
 
   const _repurchaseCourse = async (courseHash, value) => {
     try {
-      await contract.methods.repurchaseCourse(courseHash).send({
+      const result = await contract.methods.repurchaseCourse(courseHash).send({
         from: address,
         value,
       });
-    } catch {
-      console.log("Purchase course: Operation has failed");
+      mutate();
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      setBusyCourseId(null);
     }
   };
 
   return (
     <>
       <MarketHeader />
-
       <CourseList courses={courses}>
         {(course) => {
           const owned = lookup[course.id];
@@ -99,8 +115,14 @@ export default function Marketplace({ courses }) {
                 }
 
                 if (!hasFinishedFirstFetch && !address) {
-                  return <div style={{ height: "42px" }}></div>;
+                  return (
+                    <Button variant="white" size="sm" disabled={true}>
+                      {hasConnectedWallet ? "Loading State..." : "Connect"}
+                    </Button>
+                  );
                 }
+
+                const isBusy = busyCourseId === course.id;
 
                 if (owned) {
                   return (
@@ -114,13 +136,21 @@ export default function Marketplace({ courses }) {
                             <Button
                               size="sm"
                               variant="purple"
-                              disabled={false}
+                              disabled={isBusy}
                               onClick={() => {
                                 setIsNewPurchase(false);
                                 setSelectedCourse(course);
                               }}
                             >
-                              Fund to Activate
+                              {isBusy ? (
+                                <div className="flex">
+                                  {" "}
+                                  <Loader size="sm" />
+                                  <div className="ml-2">In Progress</div>
+                                </div>
+                              ) : (
+                                <div>Fund to Activate</div>
+                              )}
                             </Button>
                           </div>
                         )}
@@ -135,9 +165,17 @@ export default function Marketplace({ courses }) {
                       setSelectedCourse(course);
                     }}
                     variant="lightPurple"
-                    disabled={!hasConnectedWallet}
+                    disabled={!hasConnectedWallet || isBusy}
                   >
-                    Purchase
+                    {isBusy ? (
+                      <div className="flex">
+                        {" "}
+                        <Loader size="sm" />
+                        <div className="ml-2">In Progress</div>
+                      </div>
+                    ) : (
+                      <div>Purchase</div>
+                    )}
                   </Button>
                 );
               }}

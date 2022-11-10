@@ -35,9 +35,9 @@ export default function Navbar() {
             </div>
 
             <div className="text-center flex items-center">
-              <ActiveLink href="/wishlist">
+              <ActiveLink href="/statistics">
                 <a className="font-medium sm:mr-8 mr-1 hover:text-gray-900">
-                  Wishlist
+                  Statistics
                 </a>
               </ActiveLink>
 
